@@ -82,6 +82,18 @@ export const removeCategory = catchAsync(async (req, res) => {
   })
 })
 
+export const getCategories = catchAsync(async (req, res) => {
+  const categories = await CategoryModel.find({ parent: undefined })
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    data: {
+      categories,
+    },
+  })
+})
+
 // Check exist category by ID
 const checkExistCategory = async categoryId => {
   const { id } = await ObjectIdValidator.validateAsync({ id: categoryId })

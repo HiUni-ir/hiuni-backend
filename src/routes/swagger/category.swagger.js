@@ -103,3 +103,14 @@
  *                description: Internal server error
  *
  */
+
+/**
+ * @swagger
+ *    /categories:
+ *       get:
+ *          tags: [Category]
+ *          summary: get all categories
+ *          responses:
+ *             200:
+ *                description: success
+ */
