@@ -33,3 +33,40 @@ export const createCategory = catchAsync(async (req, res) => {
     message: ResponseMessages.CREATED_CATEGORY,
   })
 })
+
+/**
+ * Update category by ID
+ */
+export const updateCategory = catchAsync(async (req, res) => {
+  const { id } = req.params
+
+  const { _id } = await checkExistCategory(id)
+
+  const categoryDataBody = await updateCategorySchema.validateAsync(req.body)
+  const { slug, title } = categoryDataBody
+
+  const existCategory = await CategoryModel.findOne({
+    $or: [{ slug }, { title }],
+  })
+  if (existCategory)
+    throw createHttpError.BadRequest(ResponseMessages.CATEGORY_ALREADY_EXISTS)
+
+  const updatedResult = await CategoryModel.updateOne({ _id }, { $set: categoryDataBody })
+  if (updatedResult.modifiedCount == 0) {
+    throw createHttpError.InternalServerError(ResponseMessages.FAILED_UPDATED_CATEGORY)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    message: ResponseMessages.UPDATED_CATEGORY,
+  })
+})
+
+// Check exist category by ID
+const checkExistCategory = async categoryId => {
+  const { id } = await ObjectIdValidator.validateAsync({ id: categoryId })
+  const category = await CategoryModel.findById(id)
+  if (!category) throw createHttpError.NotFound(ResponseMessages.CATEGORY_NOT_FOUND)
+  return category
+}

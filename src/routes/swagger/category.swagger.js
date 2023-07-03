@@ -56,3 +56,29 @@
  *                description: Internal server error
  *
  */
+
+/**
+ * @swagger
+ *    /categories/{id}:
+ *       put:
+ *          tags: [Category]
+ *          summary: edit category by ID
+ *          parameters:
+ *             -  in: path
+ *                name: id
+ *                type: string
+ *                required: trie
+ *          requestBody:
+ *             content:
+ *                application/x-www-form-urlencoded:
+ *                   schema:
+ *                      $ref: '#/components/schemas/EditCategory'
+ *                application/json:
+ *                   schema:
+ *                      $ref: '#/components/schemas/EditCategory'
+ *          responses:
+ *             200:
+ *                description: Category updated successfully
+ *             401:
+ *                description: BadRequest
+ */
