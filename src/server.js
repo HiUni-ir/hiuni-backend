@@ -7,6 +7,7 @@ import swaggerUI from 'swagger-ui-express'
 import { appListener, appErrorHandler, port, isDevelopment } from './config/app.config.js'
 import connectDB from './config/database.config.js'
 import { swaggerSetup } from './config/swagger.config.js'
+import { morganMiddleware } from './middlewares/morgan.middleware.js'
 
 import allRoutes from './routes/index.routes.js'
 
@@ -17,6 +18,7 @@ connectDB()
 const app = express()
 
 // Middlewares
+if (isDevelopment) app.use(morganMiddleware)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/uploads', express.static('uploads'))
