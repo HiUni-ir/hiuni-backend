@@ -63,10 +63,30 @@ export const updateCategory = catchAsync(async (req, res) => {
   })
 })
 
+/**
+ * Remove category by ID
+ */
+export const removeCategory = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const { _id } = await checkExistCategory(id)
+
+  const deletedCategory = await CategoryModel.deleteOne({ _id })
+  if (!deletedCategory.deletedCount === 0) {
+    throw createHttpError.InternalServerError(ResponseMessages.FAILED_DELETE_CATEGOR)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    message: ResponseMessages.DELETED_CATEGORY,
+  })
+})
+
 // Check exist category by ID
 const checkExistCategory = async categoryId => {
   const { id } = await ObjectIdValidator.validateAsync({ id: categoryId })
   const category = await CategoryModel.findById(id)
+  console.log({ category })
   if (!category) throw createHttpError.NotFound(ResponseMessages.CATEGORY_NOT_FOUND)
   return category
 }

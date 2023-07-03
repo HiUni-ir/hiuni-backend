@@ -82,3 +82,24 @@
  *             401:
  *                description: BadRequest
  */
+
+/**
+ * @swagger
+ *    /categories/{id}:
+ *       delete:
+ *          tags: [Category]
+ *          summary: remove category by ID
+ *          parameters:
+ *             -  in: path
+ *                name: id
+ *                type: string
+ *                required: true
+ *          responses:
+ *             200:
+ *                description: Category removed successfully
+ *             404:
+ *                description: Not found category
+ *             500:
+ *                description: Internal server error
+ *
+ */
