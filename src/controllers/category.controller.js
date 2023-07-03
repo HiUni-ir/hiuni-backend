@@ -82,6 +82,9 @@ export const removeCategory = catchAsync(async (req, res) => {
   })
 })
 
+/**
+ * Get all categories
+ */
 export const getCategories = catchAsync(async (req, res) => {
   const categories = await CategoryModel.find({ parent: undefined })
 
