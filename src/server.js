@@ -4,11 +4,13 @@ import express from 'express'
 import createHttpError from 'http-errors'
 
 import { appListener, appErrorHandler, port } from './config/app.config.js'
+import connectDB from './config/database.config.js'
 
 import allRoutes from './routes/index.routes.js'
 
 // Config
 dotenv.config()
+connectDB()
 
 const app = express()
 
