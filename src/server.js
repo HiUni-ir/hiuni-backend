@@ -33,7 +33,7 @@ app.use(cors({ origin: '*' }))
 app.use(allRoutes)
 
 // Error Handler
-app.use('*', (req, res, next) => {
+app.use('*', (req, _, next) => {
   next(createHttpError.NotFound(`Can't find ${req.originalUrl} on the server!`))
 })
 app.use(appErrorHandler)

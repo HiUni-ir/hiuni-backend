@@ -6,20 +6,9 @@ import createHttpError from 'http-errors'
 
 import { nanoid, alphabetLowerCaseLetters } from '../utils/nanoid.util.js'
 
-const thumbnailStorage = multer.diskStorage({
+const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const directory = './uploads/thumbnail'
-    fs.mkdirSync(directory, { recursive: true })
-    return cb(null, directory)
-  },
-  filename: (req, file, cb) => {
-    cb(null, nanoid(alphabetLowerCaseLetters, 16) + path.extname(file.originalname))
-  },
-})
-
-const videoStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const directory = './uploads/episodes'
+    const directory = './uploads/files'
     fs.mkdirSync(directory, { recursive: true })
     return cb(null, directory)
   },
@@ -30,31 +19,15 @@ const videoStorage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname)
-  const mimetypes = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
+  const mimetypes = ['.docx', '.pdf']
   if (mimetypes.includes(ext)) return cb(null, true)
-  return cb(createHttpError.BadRequest('The submitted image format is not correct'))
+  return cb(createHttpError.BadRequest('File format must be .docx or .pdf'))
 }
 
-function videoFilter(req, file, cb) {
-  const ext = path.extname(file.originalname)
-  const mimetypes = ['.mp4', '.mpg', '.mov', '.avi', '.mkv']
-  if (mimetypes.includes(ext)) {
-    return cb(null, true)
-  }
-  return cb(createHttpError.BadRequest('The format of the video sent is not correct.'))
-}
+const fileMaxSize = 5 * 1000 * 1000 // 1MB
 
-const pictureMaxSize = 1 * 1000 * 1000 // 1MB
-const videoMaxSize = 300 * 1000 * 1000 //300MB
-
-export const uploadCourseThumbnail = multer({
-  storage: thumbnailStorage,
+export const uploadFile = multer({
+  storage: fileStorage,
   fileFilter,
-  limits: { fileSize: pictureMaxSize },
-})
-
-export const uploadEpisodeVideo = multer({
-  storage: videoStorage,
-  videoFilter,
-  limits: { fileSize: videoMaxSize },
+  limits: { fileSize: fileMaxSize },
 })

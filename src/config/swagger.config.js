@@ -6,9 +6,9 @@ export const swaggerSetup = swaggerUI.setup(
     swaggerDefinition: {
       openapi: '3.0.0',
       info: {
-        title: 'HiUni',
+        title: 'Daniyo',
         version: '1.0.0',
-        description: 'A student resource store project',
+        description: 'A student resource store APIs',
       },
       server: [
         {

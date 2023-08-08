@@ -101,7 +101,6 @@ export const getCategories = catchAsync(async (req, res) => {
 const checkExistCategory = async categoryId => {
   const { id } = await ObjectIdValidator.validateAsync({ id: categoryId })
   const category = await CategoryModel.findById(id)
-  console.log({ category })
   if (!category) throw createHttpError.NotFound(ResponseMessages.CATEGORY_NOT_FOUND)
   return category
 }
