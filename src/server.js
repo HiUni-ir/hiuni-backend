@@ -19,12 +19,13 @@ const app = express()
 
 // Middlewares
 if (isDevelopment) app.use(morganMiddleware)
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+
+app.use(express.json({ limit: 10 * 1024 * 1024 }))
+app.use(express.urlencoded({ extended: true, limit: 10 * 1024 * 1024 }))
 app.use('/uploads', express.static('uploads'))
 
 // Settings
-if (isDevelopment) app.use('/docs', swaggerUI.serve, swaggerSetup)
+app.use('/docs', swaggerUI.serve, swaggerSetup)
 
 // Auth
 app.use(cors({ origin: '*' }))

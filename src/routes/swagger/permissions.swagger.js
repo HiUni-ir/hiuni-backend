@@ -16,9 +16,6 @@
  *                   description: the description of permission
  *          EditPermission:
  *             type: object
- *             required:
- *                -  name
- *                -  description
  *             properties:
  *                name:
  *                   type: string

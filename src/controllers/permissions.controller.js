@@ -40,7 +40,7 @@ export const createPermission = async (req, res, next) => {
 
     const permission = await PermissionModel.findOne({ name })
     if (permission)
-      throw createHttpError.BadRequest(ResponseMessages.ACCESS_ALREADY_EXISTED)
+      throw createHttpError.BadRequest(ResponseMessages.PERMISSION_ALREADY_EXISTED)
 
     const permissionResult = await PermissionModel.create({ name, description })
     if (!permissionResult)

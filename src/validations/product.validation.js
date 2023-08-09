@@ -14,3 +14,16 @@ export const createProductValidation = Joi.object({
     .required()
     .error(new Error('category should be objectId')),
 })
+
+export const updateProductValidation = Joi.object({
+  title: Joi.string(),
+  slug: Joi.string().lowercase(),
+  description: Joi.string(),
+  lessonCode: Joi.string(),
+  authors: Joi.array().items(Joi.string()),
+  publisher: Joi.string(),
+  publishYear: Joi.string(),
+  category: Joi.string()
+    .pattern(MONGO_ID_PATTERN)
+    .error(new Error('category should be objectId')),
+})

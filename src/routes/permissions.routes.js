@@ -6,12 +6,13 @@ import {
   removePermission,
   updatePermission,
 } from '../controllers/permissions.controller.js'
+import { verifyAccessToken } from '../middlewares/authorization.middleware.js'
 
 const router = express.Router()
 
-router.get('/', getPermissions)
-router.post('/', createPermission)
-router.patch('/:id', updatePermission)
-router.delete('/:id', removePermission)
+router.get('/', verifyAccessToken, getPermissions)
+router.post('/', verifyAccessToken, createPermission)
+router.patch('/:id', verifyAccessToken, updatePermission)
+router.delete('/:id', verifyAccessToken, removePermission)
 
 export default router
