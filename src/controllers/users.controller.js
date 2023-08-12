@@ -50,7 +50,7 @@ export const getUsers = catchAsync(async (req, res) => {
 })
 
 export const updateProfile = catchAsync(async (req, res) => {
-  const { id } = ObjectIdValidator.validateAsync(req.params)
+  const { id } = await ObjectIdValidator.validateAsync(req.params)
   const body = await updateProfileSchema.validateAsync(req.body)
 
   const query = body?.mobile ? { ...body, verifiedMobile: false } : body
@@ -70,7 +70,7 @@ export const updateProfile = catchAsync(async (req, res) => {
  * change user role
  */
 export const changeRole = catchAsync(async (req, res) => {
-  const { id } = ObjectIdValidator.validateAsync(req.params)
+  const { id } = await ObjectIdValidator.validateAsync(req.params)
   const body = await changeRoleSchema.validateAsync(req.body)
 
   const user = await UserModel.findById(id)
@@ -79,13 +79,16 @@ export const changeRole = catchAsync(async (req, res) => {
   }
 
   // check exist role
-  const role = await RoleModel.findOne({ name: body.role })
+  const role = await RoleModel.findOne({ title: body.role })
   if (!role) {
     throw new createHttpError.NotFound(ResponseMessages.ROLE_NOT_FOUND)
   }
 
   // update role
-  const updatedResult = await UserModel.updateOne({ _id: id }, { $set: { role } })
+  const updatedResult = await UserModel.updateOne(
+    { _id: id },
+    { $set: { role: body.role } }
+  )
   if (updatedResult.modifiedCount == 0) {
     throw new createHttpError.BadRequest(ResponseMessages.FAILED_CHANGE_ROLE)
   }

@@ -102,10 +102,10 @@
 
 /**
  * @swagger
- *    /users/{id}:
+ *    /users/change-role/{id}:
  *       patch:
- *          tags: [Profile]
- *          summary: update user profile by ID
+ *          tags: [Users]
+ *          summary: change user role
  *          parameters:
  *             -  in: path
  *                name: id
@@ -115,10 +115,10 @@
  *             content:
  *                application/x-www-form-urlencoded:
  *                   schema:
- *                      $ref: '#/components/schemas/UpdateProfile'
+ *                      $ref: '#/components/schemas/ChangeRole'
  *                application/json:
  *                   schema:
- *                      $ref: '#/components/schemas/UpdateProfile'
+ *                      $ref: '#/components/schemas/ChangeRole'
  *          responses:
  *             200:
  *                description: Success
