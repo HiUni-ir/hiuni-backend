@@ -129,7 +129,7 @@
  *    /products:
  *       get:
  *          tags: [Products]
- *          summary: get one product by id
+ *          summary: get product list
  *          parameters:
  *              - in: query
  *                name: search
