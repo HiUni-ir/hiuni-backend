@@ -26,7 +26,6 @@ const UserSchema = new mongoose.Schema(
       enum: ['student', 'writer', 'admin'],
     },
     avater: { type: String, default: '' },
-    courses: { type: [mongoose.Types.ObjectId], default: [] },
   },
   {
     timestamps: true,
@@ -36,6 +35,14 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.virtual('full_name').get(function () {
   return `${this.first_name} ${this.last_name}`
+})
+
+UserSchema.index({
+  first_name: 'text',
+  last_name: 'text',
+  username: 'text',
+  mobile: 'text',
+  first_name: 'text',
 })
 
 export default mongoose.model('user', UserSchema)
