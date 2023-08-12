@@ -6,6 +6,8 @@ import { catchAsync } from '../utils/catch-async.util.js'
 
 import { copyObject } from '../constants/copy-object.constant.js'
 import { ResponseMessages } from '../constants/response-messages.constant.js'
+import { updateProfileSchema } from '../validations/user.validation.js'
+import { ObjectIdValidator } from '../validations/public.validation.js'
 
 export const getMe = catchAsync(async (req, res) => {
   const checkExistUser = req?.user
@@ -42,5 +44,22 @@ export const getUsers = catchAsync(async (req, res) => {
     status: StatusCodes.OK,
     success: true,
     users,
+  })
+})
+
+export const updateProfile = catchAsync(async (req, res) => {
+  const { id } = ObjectIdValidator.validateAsync(req.params)
+  const body = await updateProfileSchema.validateAsync(req.body)
+
+  const query = body?.mobile ? { ...body, verifiedMobile: false } : body
+  const updatedResult = await UserModel.updateOne({ _id: id }, { $set: query })
+  if (updatedResult.modifiedCount == 0) {
+    throw new createHttpError.BadRequest(ResponseMessages.FAILED_UPDATE_PROFILE)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    message: ResponseMessages.UPDATED_PROFILE,
   })
 })

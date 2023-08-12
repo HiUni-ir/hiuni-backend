@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.get('/@me', verifyAccessToken, usersController.getMe)
 router.get('/', verifyAccessToken, usersController.getUsers)
+router.patch('/:id', verifyAccessToken, usersController.updateProfile)
 
 export default router

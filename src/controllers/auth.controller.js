@@ -1,10 +1,13 @@
 // modules
 import createHttpError from 'http-errors'
 import { StatusCodes } from 'http-status-codes'
+
 // models
 import UserModel from '../models/user.model.js'
+
 // validations
 import { checkOtpSchema, getOtpSchema } from '../validations/user.validation.js'
+
 // utils
 import {
   signAccessToken,
@@ -13,10 +16,14 @@ import {
 } from '../utils/token-util.js'
 import { catchAsync } from '../utils/catch-async.util.js'
 import { generateRandomNumber } from '../utils/generate-number.util.js'
+
 // constants
 import { ROLES } from '../constants/RBACK.constant.js'
 import { ResponseMessages } from '../constants/response-messages.constant.js'
 
+/**
+ * Get otp code (send sms otp code)
+ */
 export const getOtp = catchAsync(async (req, res) => {
   const { mobile } = req.body
 
@@ -82,6 +89,14 @@ export const checkOtp = catchAsync(async (req, res) => {
   const accessToken = await signAccessToken(user._id)
   const refreshToken = await signRefreshToken(user._id)
 
+  const updateResult = await UserModel.updateOne(
+    { _id: user._id },
+    { $set: { accessToken, refreshToken, verifiedMobile: true } }
+  )
+  if (updateResult.modifiedCount == 0) {
+    throw new createHttpError.InternalServerError(ResponseMessages.FAILED_UPDATE_USER)
+  }
+
   res.status(StatusCodes.CREATED).json({
     status: StatusCodes.CREATED,
     success: true,
@@ -97,9 +112,20 @@ export const refreshToken = catchAsync(async (req, res) => {
 
   const mobile = await verifyRefreshToken(refreshToken)
   const user = await UserModel.findOne({ mobile })
+  if (!user) {
+    throw new createHttpError.NotFound(ResponseMessages.USER_NOT_FOUND)
+  }
 
   const accessToken = await signAccessToken(user._id)
   const newRefreshToken = await signRefreshToken(user._id)
+
+  const updateResult = await UserModel.updateOne(
+    { _id: user._id },
+    { $set: { accessToken, refreshToken: newRefreshToken } }
+  )
+  if (updateResult.modifiedCount == 0) {
+    throw new createHttpError.InternalServerError(ResponseMessages.FAILED_UPDATE_USER)
+  }
 
   return res.status(StatusCodes.CREATED).json({
     status: StatusCodes.CREATED,

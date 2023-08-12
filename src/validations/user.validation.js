@@ -18,3 +18,10 @@ export const checkOtpSchema = Joi.object({
     .length(6)
     .error(createHttpError.Unauthorized(ResponseMessages.INVALID_CODE)),
 })
+
+export const updateProfileSchema = Joi.object({
+  first_name: Joi.string(),
+  last_name: Joi.string(),
+  username: Joi.string(),
+  mobile: Joi.string(),
+})

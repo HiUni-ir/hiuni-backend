@@ -79,8 +79,10 @@
  *          responses:
  *             200:
  *                description: Category updated successfully
- *             401:
+ *             400:
  *                description: BadRequest
+ *             401:
+ *                description: Unauthorized
  */
 
 /**

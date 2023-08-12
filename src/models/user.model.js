@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
       unique: true,
     },
     mobile: { type: String, required: true, unique: true },
+    verifiedMobile: { type: Boolean, default: false },
     otp: {
       type: Object,
       default: {
