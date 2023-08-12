@@ -25,3 +25,7 @@ export const updateProfileSchema = Joi.object({
   username: Joi.string(),
   mobile: Joi.string(),
 })
+
+export const changeRoleSchema = Joi.object({
+  role: Joi.string(),
+})

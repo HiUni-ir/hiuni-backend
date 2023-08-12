@@ -17,6 +17,15 @@
  *                   mobile:
  *                      type: string
  *                      description: the user mobile for update profile
+ *          ChangeRole:
+ *             type: object
+ *             required:
+ *                 -  role
+ *             properties:
+ *                 role:
+ *                    type: string
+ *                    description: the role for change user role
+ *
  */
 
 /**
@@ -83,6 +92,36 @@
  *          responses:
  *             200:
  *                description: Category updated successfully
+ *             400:
+ *                description: Bad Request
+ *             401:
+ *                description: Unauthorized
+ *             500:
+ *                description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ *    /users/{id}:
+ *       patch:
+ *          tags: [Profile]
+ *          summary: update user profile by ID
+ *          parameters:
+ *             -  in: path
+ *                name: id
+ *                type: string
+ *                required: trie
+ *          requestBody:
+ *             content:
+ *                application/x-www-form-urlencoded:
+ *                   schema:
+ *                      $ref: '#/components/schemas/UpdateProfile'
+ *                application/json:
+ *                   schema:
+ *                      $ref: '#/components/schemas/UpdateProfile'
+ *          responses:
+ *             200:
+ *                description: Success
  *             400:
  *                description: Bad Request
  *             401:
