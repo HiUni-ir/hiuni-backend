@@ -165,3 +165,26 @@
  *             500:
  *                description: Internal Server Error
  */
+
+/**
+ * @swagger
+ *    /users/wishlist/{id}:
+ *       patch:
+ *          tags: [Profile]
+ *          summary: add product to wishlist by id
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                type: string
+ *                required: true
+ *                description: product id
+ *          responses:
+ *             200:
+ *                description: Success
+ *             400:
+ *                description: Bad Request
+ *             401:
+ *                description: Unauthorized
+ *             500:
+ *                description: Internal Server Error
+ */

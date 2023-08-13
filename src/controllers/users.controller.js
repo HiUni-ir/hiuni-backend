@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import UserModel from '../models/user.model.js'
 import RoleModel from '../models/role.model.js'
+import ProductModel from '../models/product.model.js'
 
 import { catchAsync } from '../utils/catch-async.util.js'
 
@@ -147,3 +148,39 @@ export const uploadAvatar = async (req, res, next) => {
     next(err)
   }
 }
+
+/**
+ * add product to wishlist by productId
+ */
+export const addToWishlist = catchAsync(async (req, res) => {
+  // validation product id
+  const { id } = await ObjectIdValidator.validateAsync(req.params)
+
+  // check exist prouct
+  const product = await ProductModel.findById(id)
+  if (!product) throw createHttpError.NotFound(ResponseMessages.PRODUCT_NOT_FOUND)
+
+  // check exist product in wishlist
+  const hasInWishlist = await UserModel.findOne({
+    _id: req.user._id,
+    wishlist: product._id,
+  })
+  if (hasInWishlist) {
+    throw new createHttpError.BadRequest(ResponseMessages.PRODUCT_ALREADY_EXIST)
+  }
+
+  // add product into wishlist
+  const updatedResult = await UserModel.updateOne(
+    { _id: req.user._id },
+    { $push: { wishlist: product._id } }
+  )
+  if (updatedResult.modifiedCount !== 1) {
+    throw new createHttpError.InternalServerError(ResponseMessages.FAILED_ADD_TO_WISHLIST)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    message: ResponseMessages.PRODUCT_ADDED_TO_WISHLIST,
+  })
+})

@@ -11,6 +11,9 @@ import { catchAsync } from '../utils/catch-async.util.js'
 import { ResponseMessages } from '../constants/response-messages.constant.js'
 import { ObjectIdValidator } from '../validations/public.validation.js'
 
+/**
+ * create product
+ */
 export const createProduct = async (req, res, next) => {
   try {
     const { error, value } = createProductValidation.validate(req.body)
@@ -46,6 +49,9 @@ export const createProduct = async (req, res, next) => {
   }
 }
 
+/**
+ * update product by ID
+ */
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = await ObjectIdValidator.validateAsync(req.params)
@@ -95,6 +101,9 @@ export const updateProduct = async (req, res, next) => {
   }
 }
 
+/**
+ * get single product by ID
+ */
 export const getSingleProduct = catchAsync(async (req, res) => {
   const { id } = await ObjectIdValidator.validateAsync(req.params)
 
@@ -110,6 +119,9 @@ export const getSingleProduct = catchAsync(async (req, res) => {
   })
 })
 
+/**
+ * get product list
+ */
 export const getProductList = catchAsync(async (req, res) => {
   const page = +req.query.page || 1
   const limit = +req.query.limit || 10
