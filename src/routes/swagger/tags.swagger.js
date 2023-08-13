@@ -1,14 +1,16 @@
 /**
- * @swaggere
+ * @swagger
  *    tags:
  *    -  name: Auth
- *       description: auth section
+ *       description: user auth section
  *    -  name: Profile
  *       description: profile section
- *    -  name: Category
- *       description: category section
+ *    -  name: Users
+ *       description: management users sections
  *    -  name: RBAC(Admin-Panel)
- *       description: management permimssion and roles section
+ *       description: management permimssions and roles section
+ *    -  name: Category
+ *       description: management category section
  *    -  name: Products
- *       description: products section
+ *       description: management products section
  */

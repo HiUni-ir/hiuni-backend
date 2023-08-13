@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema(
       default: 'student',
       enum: ['student', 'writer', 'admin'],
     },
-    avater: { type: String, default: '' },
+    avatar: { type: String, default: '' },
   },
   {
     timestamps: true,

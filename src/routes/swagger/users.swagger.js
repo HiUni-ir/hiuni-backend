@@ -25,6 +25,15 @@
  *                 role:
  *                    type: string
  *                    description: the role for change user role
+ *          UploadAvatar:
+ *              type: object
+ *              required:
+ *                  - avatar
+ *              properties:
+ *                  avatar:
+ *                      type: string
+ *                      format: binary
+ *                      description: upload a image for user avatar
  *
  */
 
@@ -119,6 +128,33 @@
  *                application/json:
  *                   schema:
  *                      $ref: '#/components/schemas/ChangeRole'
+ *          responses:
+ *             200:
+ *                description: Success
+ *             400:
+ *                description: Bad Request
+ *             401:
+ *                description: Unauthorized
+ *             500:
+ *                description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ *    /users/upload-avatar/{id}:
+ *       patch:
+ *          tags: [Profile]
+ *          summary: upload user avatar
+ *          parameters:
+ *             -  in: path
+ *                name: id
+ *                type: string
+ *                required: trie
+ *          requestBody:
+ *             content:
+ *                multipart/form-data:
+ *                   schema:
+ *                      $ref: '#/components/schemas/UploadAvatar'
  *          responses:
  *             200:
  *                description: Success

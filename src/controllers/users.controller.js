@@ -8,8 +8,10 @@ import { catchAsync } from '../utils/catch-async.util.js'
 
 import { copyObject } from '../constants/copy-object.constant.js'
 import { ResponseMessages } from '../constants/response-messages.constant.js'
+
 import { changeRoleSchema, updateProfileSchema } from '../validations/user.validation.js'
 import { ObjectIdValidator } from '../validations/public.validation.js'
+import { deleteFile } from '../utils/file-system.util.js'
 
 export const getMe = catchAsync(async (req, res) => {
   const checkExistUser = req?.user
@@ -99,3 +101,49 @@ export const changeRole = catchAsync(async (req, res) => {
     message: ResponseMessages.CHANGED_ROLE,
   })
 })
+
+/**
+ * upload user profile avatar
+ */
+export const uploadAvatar = async (req, res, next) => {
+  try {
+    const { id } = await ObjectIdValidator.validateAsync(req.params)
+
+    // check exist user
+    const user = await UserModel.findById(id)
+    if (!user) {
+      throw new createHttpError.NotFound(ResponseMessages.USER_NOT_FOUND)
+    }
+
+    // check exist avatar file
+    if (!req?.file) {
+      throw new createHttpError.BadRequest(ResponseMessages.AVATAR_IS_REQUIRED)
+    }
+
+    const avatar = req?.file?.path?.replace(/\\/g, '/')
+    deleteFile(user.avatar)
+
+    // update avatar
+    const updatedResult = await UserModel.findOneAndUpdate(
+      { _id: user._id },
+      { avatar },
+      { new: true }
+    )
+
+    if (!updatedResult) {
+      throw new createHttpError.InternalServerError(ResponseMessages.FAILED_UPDATE_AVATAR)
+    }
+
+    res.status(StatusCodes.OK).json({
+      status: StatusCodes.OK,
+      success: true,
+      avatar: updatedResult.avatar,
+    })
+  } catch (err) {
+    if (req?.file) {
+      const file = req?.file?.path?.replace(/\\/g, '/')
+      deleteFile(file)
+    }
+    next(err)
+  }
+}
