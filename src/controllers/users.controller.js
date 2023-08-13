@@ -220,3 +220,19 @@ export const removeProductFromWishlist = catchAsync(async (req, res) => {
     message: ResponseMessages.REMOVED_PRODUCT_FROM_WISHLIST,
   })
 })
+
+export const getWishlist = catchAsync(async (req, res) => {
+  const wishlist = await UserModel.findOne(
+    { _id: req.user.id },
+    { wishlist: 1 }
+  ).populate('wishlist')
+  if (!wishlist) {
+    throw new createHttpError.InternalServerError(ResponseMessages.FAILED_GET_WISHLIST)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    wishlist: wishlist.wishlist,
+  })
+})

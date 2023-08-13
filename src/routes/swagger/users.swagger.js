@@ -189,7 +189,6 @@
  *                description: Internal Server Error
  */
 
-
 /**
  * @swagger
  *    /users/wishlist/remove/{id}:
@@ -202,6 +201,23 @@
  *                type: string
  *                required: true
  *                description: product id
+ *          responses:
+ *             200:
+ *                description: Success
+ *             400:
+ *                description: Bad Request
+ *             401:
+ *                description: Unauthorized
+ *             500:
+ *                description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ *    /users/wishlist:
+ *       get:
+ *          tags: [Profile]
+ *          summary: get wishlist
  *          responses:
  *             200:
  *                description: Success

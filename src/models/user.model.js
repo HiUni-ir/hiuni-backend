@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema(
       enum: ['student', 'writer', 'admin'],
     },
     avatar: { type: String, default: '' },
-    wishlist: { type: [mongoose.Types.ObjectId], default: [] },
+    wishlist: { type: [mongoose.Types.ObjectId], default: [], ref: 'product' },
   },
   {
     timestamps: true,

@@ -21,5 +21,6 @@ router.patch(
   verifyAccessToken,
   usersController.removeProductFromWishlist
 )
+router.get('/wishlist', verifyAccessToken, usersController.getWishlist)
 
 export default router
