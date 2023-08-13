@@ -152,7 +152,7 @@ export const uploadAvatar = async (req, res, next) => {
 /**
  * add product to wishlist by productId
  */
-export const addToWishlist = catchAsync(async (req, res) => {
+export const addProductToWishlist = catchAsync(async (req, res) => {
   // validation product id
   const { id } = await ObjectIdValidator.validateAsync(req.params)
 
@@ -182,5 +182,41 @@ export const addToWishlist = catchAsync(async (req, res) => {
     status: StatusCodes.OK,
     success: true,
     message: ResponseMessages.PRODUCT_ADDED_TO_WISHLIST,
+  })
+})
+
+/**
+ * remove product from wishlist by productId
+ */
+export const removeProductFromWishlist = catchAsync(async (req, res) => {
+  // validation product id
+  const { id } = await ObjectIdValidator.validateAsync(req.params)
+
+  // check exist prouct
+  const product = await ProductModel.findById(id)
+  if (!product) throw createHttpError.NotFound(ResponseMessages.PRODUCT_NOT_FOUND)
+
+  // check exist product in wishlist
+  const hasInWishlist = await UserModel.findOne({
+    _id: req.user._id,
+    wishlist: product._id,
+  })
+  if (!hasInWishlist) {
+    throw new createHttpError.BadRequest(ResponseMessages.NOT_EXIST_PRODUCT_IN_WISHLIST)
+  }
+
+  // remove product into wishlist
+  const updatedResult = await UserModel.updateOne(
+    { _id: req.user._id },
+    { $pull: { wishlist: product._id } }
+  )
+  if (updatedResult.modifiedCount !== 1) {
+    throw new createHttpError.InternalServerError(ResponseMessages.FAILED_ADD_TO_WISHLIST)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    message: ResponseMessages.REMOVED_PRODUCT_FROM_WISHLIST,
   })
 })

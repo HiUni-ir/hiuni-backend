@@ -15,6 +15,11 @@ router.patch(
   uploadPicture.single('avatar'),
   usersController.uploadAvatar
 )
-router.patch('/wishlist/:id', verifyAccessToken, usersController.addToWishlist)
+router.patch('/wishlist/add/:id', verifyAccessToken, usersController.addProductToWishlist)
+router.patch(
+  '/wishlist/remove/:id',
+  verifyAccessToken,
+  usersController.removeProductFromWishlist
+)
 
 export default router
