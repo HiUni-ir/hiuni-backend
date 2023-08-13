@@ -1,7 +1,7 @@
 // modules
+import axios from 'axios'
 import createHttpError from 'http-errors'
 import { StatusCodes } from 'http-status-codes'
-
 // models
 import UserModel from '../models/user.model.js'
 
@@ -33,13 +33,12 @@ export const getOtp = catchAsync(async (req, res) => {
   const result = await saveUser(mobile, code)
   if (!result) throw createHttpError.Unauthorized(ResponseMessages.UNAUTHORIZED)
 
+  await sendOtpSms(mobile, code)
+
   res.status(StatusCodes.CREATED).json({
     status: StatusCodes.CREATED,
     success: true,
-    data: {
-      code,
-      mobile,
-    },
+    message: ResponseMessages.CODE_SENT_FOR_YOU,
   })
 })
 
@@ -133,3 +132,34 @@ export const refreshToken = catchAsync(async (req, res) => {
     refreshToken: newRefreshToken,
   })
 })
+
+/**
+ * send sms otp code to user
+ */
+export const sendOtpSms = async (mobile, code) => {
+  try {
+    const apiKey = process.env.IPPANEL_API_KEY
+    const apiUrl = process.env.IPPANEL_API_URL
+    const pattern_code = process.env.IPPANEL_PATTERN
+
+    const data = {
+      pattern_code,
+      originator: '+985000404223',
+      recipient: mobile,
+      values: {
+        'verification-code': String(code),
+      },
+    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `AccessKey ${apiKey}`,
+      },
+    }
+
+    await axios.post(apiUrl, data, config).catch(err => console.log(err.response.data))
+  } catch (error) {
+    throw new createHttpError.InternalServerError(ResponseMessages.FAILED_SEND_OTP_SMS)
+  }
+}
