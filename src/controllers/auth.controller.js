@@ -33,12 +33,16 @@ export const getOtp = catchAsync(async (req, res) => {
   const result = await saveUser(mobile, code)
   if (!result) throw createHttpError.Unauthorized(ResponseMessages.UNAUTHORIZED)
 
-  await sendOtpSms(mobile, code)
+  // await sendOtpSms(mobile, code)
 
   res.status(StatusCodes.CREATED).json({
     status: StatusCodes.CREATED,
     success: true,
-    message: ResponseMessages.CODE_SENT_FOR_YOU,
+    data: {
+      code,
+      mobile,
+    },
+    // message: ResponseMessages.CODE_SENT_FOR_YOU,
   })
 })
 

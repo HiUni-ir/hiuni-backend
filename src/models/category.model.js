@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const CategorySchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, required: true },
     disabled: { type: Boolean, default: false },
     parent: { type: mongoose.Types.ObjectId, default: undefined, ref: 'category' },
   },

@@ -19,7 +19,7 @@ export const createCategory = catchAsync(async (req, res) => {
     req.body
   )
 
-  const existCategory = await CategoryModel.findOne({ title })
+  const existCategory = await CategoryModel.findOne({ title, parent: undefined })
   if (existCategory)
     throw createHttpError.BadRequest(ResponseMessages.CATEGORY_ALREADY_EXISTS)
 
