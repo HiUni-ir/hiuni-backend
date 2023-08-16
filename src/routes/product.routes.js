@@ -23,6 +23,7 @@ router.patch(
 )
 
 router.get('/', productsController.getProductList)
+router.get('/newest', productsController.getNewestProductList)
 router.get('/:id', productsController.getSingleProduct)
 
 export default router

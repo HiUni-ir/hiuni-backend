@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import {
   createProductValidation,
+  getProductLis,
   updateProductValidation,
 } from '../validations/product.validation.js'
 import ProductModel from '../models/product.model.js'
@@ -128,6 +129,35 @@ export const getProductList = catchAsync(async (req, res) => {
   const search = req.query.search
 
   const products = await ProductModel.find(search ? { $text: { $search: search } } : {})
+    .skip((page - 1) * limit)
+    .limit(limit)
+
+  if (!products) {
+    throw createHttpError.NotFound(ResponseMessages.FAILED_GET_PRODUCT)
+  }
+
+  res.status(StatusCodes.OK).json({
+    status: StatusCodes.OK,
+    success: true,
+    products,
+  })
+})
+
+/**
+ * get newest product list
+ */
+export const getNewestProductList = catchAsync(async (req, res) => {
+  const { error, value } = getProductLis.validate(req.query)
+  if (error) {
+    throw new createHttpError.BadRequest(error.message.replace(/(\"|\[|\d\])/g, ''))
+  }
+
+  const page = value?.page || 1
+  const limit = value?.limit || 10
+  const search = value?.search
+
+  const products = await ProductModel.find(search ? { $text: { $search: search } } : {})
+    .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
 

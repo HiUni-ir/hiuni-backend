@@ -27,3 +27,9 @@ export const updateProductValidation = Joi.object({
     .pattern(MONGO_ID_PATTERN)
     .error(new Error('category should be objectId')),
 })
+
+export const getProductLis = Joi.object({
+  page: Joi.number(),
+  limit: Joi.number(),
+  search: Joi.string(),
+})

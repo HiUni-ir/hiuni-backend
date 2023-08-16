@@ -33,16 +33,12 @@ export const getOtp = catchAsync(async (req, res) => {
   const result = await saveUser(mobile, code)
   if (!result) throw createHttpError.Unauthorized(ResponseMessages.UNAUTHORIZED)
 
-  // await sendOtpSms(mobile, code)
+  await sendOtpSms(mobile, code)
 
   res.status(StatusCodes.CREATED).json({
     status: StatusCodes.CREATED,
     success: true,
-    data: {
-      code,
-      mobile,
-    },
-    // message: ResponseMessages.CODE_SENT_FOR_YOU,
+    message: ResponseMessages.CODE_SENT_FOR_YOU,
   })
 })
 
@@ -162,7 +158,10 @@ export const sendOtpSms = async (mobile, code) => {
       },
     }
 
-    await axios.post(apiUrl, data, config).catch(err => console.log(err.response.data))
+    await axios
+      .post(apiUrl, data, config)
+      .then(res => console.log(res))
+      .catch(err => console.log(err.response.data))
   } catch (error) {
     throw new createHttpError.InternalServerError(ResponseMessages.FAILED_SEND_OTP_SMS)
   }

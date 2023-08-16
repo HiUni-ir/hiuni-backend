@@ -153,6 +153,33 @@
 
 /**
  * @swagger
+ *    /products/newest:
+ *       get:
+ *          tags: [Products]
+ *          summary: get newest product list
+ *          parameters:
+ *              - in: query
+ *                name: search
+ *                type: string
+ *              - in: query
+ *                name: page
+ *                type: string
+ *              - in: query
+ *                name: limit
+ *                type: string
+ *          responses:
+ *             200:
+ *                description: Success
+ *             400:
+ *                description: Bad Request
+ *             401:
+ *                description: Unauthorized
+ *             500:
+ *                description: Internal Server Error
+ */
+
+/**
+ * @swagger
  *    /products/{id}:
  *       get:
  *          tags: [Products]
